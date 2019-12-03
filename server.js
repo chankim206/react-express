@@ -1,7 +1,7 @@
 const express = require("express");
 
 const app = express();
-
+app.set("port", process.env.PORT || 5000);
 app.get("/api/customers", (req, res) => {
   const customers = [
     { id: 1, firstName: "John", lastName: "Doe" },
@@ -11,6 +11,10 @@ app.get("/api/customers", (req, res) => {
   res.json(customers);
 });
 
-const port = process.env.PORT || 5000;
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
 
-app.listen(port, () => console.log(`Server started on port ${port}`));
+app.listen(app.get("port"), () =>
+  console.log(`Server started on port ${app.get("port")}`)
+);
